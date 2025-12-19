@@ -24,6 +24,32 @@ class ScannerVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setUpCameraSession()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = view.layer.bounds
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        DispatchQueue.global(qos: .background).async {
+            self.session.startRunning()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        DispatchQueue.global(qos: .background).async {
+            self.session.stopRunning()
+        }
+    }
+    
     func setUpCameraSession(){
         let metadataOutput = AVCaptureMetadataOutput()
         
