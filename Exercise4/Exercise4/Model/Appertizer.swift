@@ -5,7 +5,7 @@
 //  Created by Khue on 29/12/25.
 //
 
-struct Appertizer: Decodable {
+struct Appertizer: Decodable, Identifiable {
     let id: Int
     let name: String
     let description: String
