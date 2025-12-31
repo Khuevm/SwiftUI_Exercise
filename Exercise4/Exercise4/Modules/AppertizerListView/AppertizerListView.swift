@@ -12,15 +12,31 @@ struct AppertizerListView: View {
     
     var body: some View {
         NavigationStack {
-            List(viewModel.appertizers) { appetizer in
-                AppertizerListCell(appertizer: appetizer)
-                    .frame(height: 100)
+            if viewModel.isLoading {
+                ActivityIndicator()
+            } else {
+                List(viewModel.appertizers) { appetizer in
+                    AppertizerListCell(appertizer: appetizer)
+                        .frame(height: 100)
+                }
+                .listStyle(.plain)
+                .navigationTitle("Appertizers")
             }
-            .listStyle(.plain)
-            .navigationTitle("Appertizers")
         }
         .onAppear { // Tương tự viewWillAppear
             viewModel.getAppertizers()
+        }
+        .alert(
+            viewModel.alertItem?.title ?? "",
+            isPresented: Binding(
+                get: { viewModel.alertItem != nil },
+                set: { if !$0 { viewModel.alertItem = nil } }
+            ),
+            presenting: viewModel.alertItem
+        ) { alert in
+            Button(alert.dismissButton, role: .cancel) {}
+        } message: { alert in
+            Text(alert.desc)
         }
     }
 }
