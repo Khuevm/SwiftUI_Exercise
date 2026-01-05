@@ -33,6 +33,7 @@ class NetworkManager {
                 complete(.failure(.networkNoData))
                 return
             }
+            dump(decodedData)
             complete(.success(request))
         }.resume()
     }

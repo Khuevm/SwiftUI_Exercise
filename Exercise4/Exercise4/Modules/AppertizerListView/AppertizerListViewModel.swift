@@ -13,6 +13,9 @@ class AppertizerListViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var isLoading = false
     
+    var selectedAppertizer: Appertizer?
+    @Published var isShowingDetailView = false
+    
     func getAppertizers() {
         isLoading = true
         NetworkManager.shared.getAppertizers { result in

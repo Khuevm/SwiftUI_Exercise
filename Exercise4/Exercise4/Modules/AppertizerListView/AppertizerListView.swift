@@ -15,12 +15,27 @@ struct AppertizerListView: View {
             if viewModel.isLoading {
                 ActivityIndicator()
             } else {
-                List(viewModel.appertizers) { appetizer in
-                    AppertizerListCell(appertizer: appetizer)
-                        .frame(height: 100)
+                ZStack {
+                    List(viewModel.appertizers) { appetizer in
+                        AppertizerListCell(appertizer: appetizer)
+                            .frame(height: 100)
+                            .onTapGesture {
+                                viewModel.selectedAppertizer = appetizer
+                                viewModel.isShowingDetailView = true
+                            }
+                    }
+                    .listStyle(.plain)
+                    .navigationTitle("Appertizers")
+//                    .blur(radius: viewModel.isShowingDetailView ? 20 : 0)
+//                    .scrollDisabled(viewModel.isShowingDetailView)
+                    
+                    if viewModel.isShowingDetailView {
+                        Color.clear
+                                .background(.ultraThinMaterial)
+                                .ignoresSafeArea()
+                        AppertizerDetailView(appertizer: viewModel.selectedAppertizer!, isShowingDetailView: $viewModel.isShowingDetailView)
+                    }
                 }
-                .listStyle(.plain)
-                .navigationTitle("Appertizers")
             }
         }
         .onAppear { // Tương tự viewWillAppear
@@ -43,14 +58,19 @@ struct AppertizerListView: View {
 
 struct AppertizerListCell: View {
     let appertizer: Appertizer
+    @StateObject private var viewModel = ImageLoaderViewModel()
     
     var body: some View {
         HStack(spacing: 16) {
-            Image("cat2")
+            Image(uiImage: viewModel.image ?? UIImage(named: "img_food_placeholder")!)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .scaledToFill()
                 .frame(width: 120)
                 .cornerRadius(16)
+                .clipped()
+                .onAppear {
+                    viewModel.downloadImage(urlString: appertizer.imageURL)
+                }
             
             VStack(alignment: .leading) {
                 Text(appertizer.name)
@@ -66,7 +86,7 @@ struct AppertizerListCell: View {
     }
 }
 
-
-#Preview {
-    AppertizerListView()
-}
+//
+//#Preview {
+//    AppertizerListView()
+//}
