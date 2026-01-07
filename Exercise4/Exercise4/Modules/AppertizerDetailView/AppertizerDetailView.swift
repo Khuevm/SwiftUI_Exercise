@@ -10,6 +10,7 @@ import SwiftUI
 struct AppertizerDetailView: View {
     let appertizer: Appertizer
     @Binding var isShowingDetailView: Bool
+    @EnvironmentObject var order: Order
     
     @StateObject private var imageViewModel = ImageLoaderViewModel()
     
@@ -37,7 +38,8 @@ struct AppertizerDetailView: View {
             }
             Spacer()
             Button {
-                //
+                order.add(appertizer)
+                isShowingDetailView = false
             } label: {
                 Text("$\(appertizer.price, specifier: "%.2f") - Add to Order")
                     .font(.title3)
