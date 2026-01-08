@@ -35,4 +35,27 @@ class AppertizerListViewModel: ObservableObject {
             }
         }
     }
+    
+    func getAppertizers2() {
+        isLoading = true
+        
+        Task {
+            do {
+                appertizers = try await NetworkManager.shared.getAppertizers2()
+                isLoading = false
+            } catch {
+                if let apError = error as? APError {
+                    switch apError {
+                    case .networkError:
+                        self.alertItem = AlertContext.networkError
+                    case .networkNoData:
+                        self.alertItem = AlertContext.networkNoData
+                    }
+                } else {
+                    self.alertItem = AlertContext.networkError
+                }
+                isLoading = false
+            }
+        }
+    }
 }

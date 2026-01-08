@@ -38,6 +38,25 @@ class NetworkManager {
         }.resume()
     }
     
+    func getAppertizers2() async throws -> [Appertizer] { // Async
+        guard let url = URL(string: appertizerURL) else {
+            throw APError.networkError
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decodedData = try JSONDecoder().decode(AppertizerRespond.self, from: data)
+            let request = decodedData.request
+            if request.isEmpty {
+                throw APError.networkNoData
+            }
+            dump(decodedData)
+            return request
+        } catch {
+            throw APError.networkError
+        }
+    }
+    
     func downloadImage(urlString: String, complete: @escaping (UIImage?) -> Void){
         let cacheKey = NSString(string: urlString)
         if let image = cache.object(forKey: cacheKey) {

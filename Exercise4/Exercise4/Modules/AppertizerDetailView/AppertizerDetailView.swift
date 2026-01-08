@@ -42,14 +42,7 @@ struct AppertizerDetailView: View {
                 isShowingDetailView = false
             } label: {
                 Text("$\(appertizer.price, specifier: "%.2f") - Add to Order")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.white)
-                    .frame(height: 60)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.accent)
-                    .cornerRadius(8)
-                    .padding()
+                    .modifier(StandardButtonStyle())
             }
         }
         .frame(width: 320, height: 525)

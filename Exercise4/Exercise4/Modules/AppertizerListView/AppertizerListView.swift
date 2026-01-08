@@ -19,6 +19,7 @@ struct AppertizerListView: View {
                     List(viewModel.appertizers) { appetizer in
                         AppertizerListCell(appertizer: appetizer)
                             .frame(height: 100)
+                            .listRowSeparator(.hidden)
                             .onTapGesture {
                                 viewModel.selectedAppertizer = appetizer
                                 viewModel.isShowingDetailView = true
@@ -38,8 +39,11 @@ struct AppertizerListView: View {
                 }
             }
         }
-        .onAppear { // Tương tự viewWillAppear
-            viewModel.getAppertizers()
+//        .onAppear { // Tương tự viewWillAppear
+//            viewModel.getAppertizers()
+//        }
+        .task { // Tương tự viewWillAppear dùng async
+            viewModel.getAppertizers2()
         }
         .alert(
             viewModel.alertItem?.title ?? "",

@@ -8,36 +8,21 @@
 import SwiftUI
 
 struct AppertizerTabView: View {
+    @EnvironmentObject var order: Order
+    
     var body: some View {
         TabView {
             AppertizerListView()
-                .tabItem {
-                    Label {
-                        Text("Home")
-                    } icon: {
-                        Image(systemName: "house")
-                    }
-                }
+                .tabItem { Label("Home", systemImage: "house") }
             OrderView()
-                .tabItem {
-                    Label {
-                        Text("Order")
-                    } icon: {
-                        Image(systemName: "bag")
-                    }
-                }
+                .tabItem { Label("Order", systemImage: "bag") }
+                .badge(order.items.count)
             AccountView()
-                .tabItem {
-                    Label {
-                        Text("Account")
-                    } icon: {
-                        Image(systemName: "person")
-                    }
-                }
+                .tabItem { Label("Account", systemImage: "person") }
         }
     }
 }
 
-#Preview {
-    AppertizerTabView()
-}
+//#Preview {
+//    AppertizerTabView()
+//}

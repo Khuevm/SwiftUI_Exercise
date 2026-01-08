@@ -16,6 +16,7 @@ struct OrderView: View {
                 List {
                     ForEach(order.items) { item in
                         AppertizerListCell(appertizer: item)
+                            .listRowSeparator(.hidden)
                             .frame(height: 100)
                     }
                     .onDelete { indexSet in
@@ -34,14 +35,7 @@ struct OrderView: View {
                     //
                 } label: {
                     Text("$\(order.totalPrice, specifier: "%.2f") - Add to Order")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Color.white)
-                        .frame(height: 60)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.accent)
-                        .cornerRadius(8)
-                        .padding()
+                        .modifier(StandardButtonStyle())
                 }
             }
         }
