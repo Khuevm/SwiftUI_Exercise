@@ -13,7 +13,13 @@ struct AppertizerListView: View {
     var body: some View {
         NavigationStack {
             if viewModel.isLoading {
-                ActivityIndicator()
+//                ActivityIndicator()
+                // Other way
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .scaleEffect(2)
+                    .tint(.accent)
+                    
             } else {
                 ZStack {
                     List(viewModel.appertizers) { appetizer in

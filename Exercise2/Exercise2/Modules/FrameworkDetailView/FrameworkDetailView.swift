@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct FrameworkDetailView: View {
-    @Binding var isShowDetailView: Bool
-    let framework: Framework
+    @ObservedObject var viewModel: FrameworkDetailViewModel
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button {
-                    isShowDetailView = false
+                    viewModel.isShowDetailView.wrappedValue = false
                 } label: {
                     Image(systemName: "xmark")
                         .foregroundStyle(Color(.label))
@@ -24,19 +23,19 @@ struct FrameworkDetailView: View {
                 }
             }
             Spacer()
-            Image(framework.imageName)
+            Image(viewModel.framework.imageName)
                 .resizable()
                 .frame(width: 100, height: 100)
-            Text(framework.name)
+            Text(viewModel.framework.name)
                 .font(.title)
                 .fontWeight(.bold)
                 .padding(.bottom, 20)
                 
-            Text(framework.desc)
+            Text(viewModel.framework.desc)
                 .multilineTextAlignment(.center)
             Spacer()
             
-            Link(destination: URL(string: framework.urlString)!) {
+            Link(destination: URL(string: viewModel.framework.urlString)!) {
                 Text("Learn More")
                     .font(.headline)
                     .foregroundStyle(Color.white)
@@ -49,8 +48,4 @@ struct FrameworkDetailView: View {
         }
         .padding()
     }
-}
-
-#Preview {
-    FrameworkDetailView(isShowDetailView: .constant(true), framework: MockData.sampleFramework)
 }

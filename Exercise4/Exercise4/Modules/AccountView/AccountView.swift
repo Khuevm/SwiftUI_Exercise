@@ -35,7 +35,7 @@ struct AccountView: View {
                         .focused($focusTextField, equals: .email)
                         .onSubmit { focusTextField = nil }
                     
-                    DatePicker("Birthday", selection: $viewModel.user.birthDate, displayedComponents: .date)
+                    DatePicker("Birthday", selection: $viewModel.user.birthDate, in: ...Date(), displayedComponents: .date)
                     Button {
                         viewModel.saveUser()
                     } label: {
