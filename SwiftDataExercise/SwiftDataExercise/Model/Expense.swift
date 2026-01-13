@@ -22,4 +22,10 @@ class Expense {
     }
     
     init() {}
+    
+    func getData(from expense: Expense) {
+        self.date = expense.date
+        self.name = expense.name
+        self.price = expense.price
+    }
 }

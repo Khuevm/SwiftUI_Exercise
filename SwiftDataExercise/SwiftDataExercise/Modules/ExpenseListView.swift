@@ -10,9 +10,10 @@ import SwiftData
 
 struct ExpenseListView: View {
     @Environment(\.modelContext) var context
+    @Query(sort: \Expense.date, order: .reverse) var expenses: [Expense]
     
     @State var isShowingAddExpenseView = false
-    @Query(sort: \Expense.date) var expenses: [Expense]
+    @State private var selectedExpense: Expense?
     
     var body: some View {
         NavigationStack {
@@ -20,11 +21,10 @@ struct ExpenseListView: View {
                 ForEach(expenses) { expense in
                     ExpenseCell(expense: expense)
                         .frame(height: 50)
-//                        .onTapGesture {
-//                            isShowingAddExpenseView = true
-//                        }.navigationDestination(isPresented: $isShowingAddExpenseView) {
-//                            AddExpenseView(expense: expense)
-//                        }
+                        .onTapGesture {
+                            selectedExpense = expense
+                            isShowingAddExpenseView = true
+                        }
                 }
                 .onDelete { indexSet in
                     for index in indexSet {
@@ -32,17 +32,16 @@ struct ExpenseListView: View {
                     }
                 }
             }
-            .toolbar(content: {
+            .toolbar {
                 if !expenses.isEmpty {
                     ToolbarItemGroup(placement: .topBarTrailing) {
                         Button("", systemImage: "plus") {
+                            selectedExpense = nil
                             isShowingAddExpenseView = true
-                        }.navigationDestination(isPresented: $isShowingAddExpenseView) {
-                            AddExpenseView()
                         }
                     }
                 }
-            })
+            }
             .navigationTitle("Expenses")
             .overlay {
                 if expenses.isEmpty {
@@ -52,12 +51,14 @@ struct ExpenseListView: View {
                         Text("Start adding expense to see your list")
                     } actions: {
                         Button("Add Expense") {
+                            selectedExpense = nil
                             isShowingAddExpenseView = true
-                        }.navigationDestination(isPresented: $isShowingAddExpenseView) {
-                            AddExpenseView()
                         }
                     }
                 }
+            }
+            .navigationDestination(isPresented: $isShowingAddExpenseView) {
+                AddExpenseView(expense: selectedExpense)
             }
         }
     }

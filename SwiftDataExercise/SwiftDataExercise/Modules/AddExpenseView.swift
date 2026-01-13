@@ -13,6 +13,10 @@ struct AddExpenseView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State var expense = Expense()
+    private let editExpense: Expense?
+    
+    init(expense: Expense? = nil) {
+        self.editExpense = expense    }
     
     var body: some View {
         NavigationStack {
@@ -22,11 +26,11 @@ struct AddExpenseView: View {
                 TextField("Value", value: $expense.price, format: .currency(code: "USD"))
                     .keyboardType(.decimalPad)
             }
-                .navigationTitle("New Expense")
+            .navigationTitle(editExpense == nil ? "New Expense" : "Edit Expense")
                 .toolbarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        Button("Save") {
+                        Button(editExpense == nil ? "Save" : "Update") {
                             if expense.name.isEmpty || expense.price == 0 {
                                 return 
                             }
@@ -35,11 +39,20 @@ struct AddExpenseView: View {
                         }
                     }
                 }
+                .onAppear {
+                    if let editExpense {
+                        self.expense.getData(from: editExpense)
+                    }
+                }
         }
     }
     
     func save() {
-        context.insert(expense)
+        if let editExpense {
+            editExpense.getData(from: expense)
+        } else {
+            context.insert(expense)
+        }
     }
 }
 
